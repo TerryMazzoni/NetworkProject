@@ -24,7 +24,8 @@ export default function SocketProgramWebsite() {
       if (!/^[0-9+\-*/().\s]+$/.test(expression)) {
         throw new Error("Invalid expression");
       }
-      const calculated = Function(`return (${expression})`)();
+      const math = require("mathjs");
+      const calculated = math.evaluate(expression);
       setResult(calculated);
     } catch {
       setResult("Error: Invalid expression");
