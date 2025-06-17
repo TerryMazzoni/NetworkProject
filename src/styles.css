@@ -1,0 +1,154 @@
+body {
+    font-family: sans-serif;
+    background: linear-gradient(to bottom right, #f8fafc, #ffffff);
+    margin: 0;
+    padding: 0;
+}
+  
+.container {
+    max-width: 96rem;
+    margin: auto;
+    padding: 1.5rem;
+    min-height: 100vh;
+}
+  
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-align: center;
+    color: #1d4ed8;
+    margin-bottom: 2.5rem;
+    text-shadow: 1px 1px #cbd5e1;
+}
+  
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+  
+.tab-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid #93c5fd;
+    background-color: white;
+    color: #1d4ed8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+  
+.tab-btn:hover {
+    background-color: #dbeafe;
+}
+  
+.tab-btn.active {
+    background-color: #2563eb;
+    color: white;
+    transform: scale(1.05);
+    border: none;
+}
+  
+.card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+  
+input[type="text"] {
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    width: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+  
+input[type="text"]:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 2px #bfdbfe;
+}
+  
+button.submit {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+  
+button.submit:hover {
+    background-color: #1e40af;
+}
+  
+button.dns {
+    background-color: #16a34a;
+}
+  
+button.dns:hover {
+    background-color: #166534;
+}
+  
+.response {
+    font-weight: 500;
+    margin-top: 0.75rem;
+}
+
+.response.red {
+    color: #dc2626;
+}
+
+.response.green {
+    color: #15803d;
+}
+  
+.response.purple {
+    color: #7c3aed;
+}
+
+.inner-tabs {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+  
+.inner-tab-btn {
+    padding: 10px 15px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.inner-tab-btn:hover {
+    background-color: #e0f2ff;
+    border-color: #90cdf4;
+    color: #007acc;
+}
+  
+.inner-tab-btn.active {
+    background-color: #007acc;
+    color: #fff;
+    border-color: #005fa3;
+}
+  
+.inner-tab-content {
+    margin-top: 20px;
+}
