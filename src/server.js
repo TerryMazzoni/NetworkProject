@@ -14,7 +14,7 @@ app.post("/calculate", (req, res) => {
     const { expression } = req.body;
 
     const client = new net.Socket();
-    client.connect(8888, "127.0.0.1", () => {
+    client.connect(8888, "127.12.0.1", () => {
         client.write(expression);
     });
 
@@ -33,7 +33,7 @@ app.post("/dns", (req, res) => {
     const { dnsInput } = req.body;
 
     const client = new net.Socket();
-    client.connect(8889, "127.0.0.1", () => {
+    client.connect(8889, "127.12.0.1", () => {
         client.write(dnsInput);
     });
 

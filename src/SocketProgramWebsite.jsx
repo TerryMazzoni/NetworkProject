@@ -1,8 +1,9 @@
 import { useState } from "react";
 import lecturesData from "./lectureRessources.json";
-import axios from "axios";
+// import axios from "axios";
 
 import "./styles.css";
+
 
 export default function SocketProgramWebsite() {
   const [tab, setTab] = useState("intro");
@@ -12,35 +13,77 @@ export default function SocketProgramWebsite() {
   const [dnsInput, setDnsInput] = useState("");
   const [dnsResponse, setDnsResponse] = useState(null);
 
-  async function handleCalcSubmit(e) {
+  const dnsDB = useState({});
+
+  function handleCalcSubmit(e) {
     e.preventDefault();
     try {
-      console.log("Sending expression:", expression);
-      const response = await axios.post ("http://localhost:3001/calculate", { expression });
-      console.log("Received response:", response.data);
-      setResult(response.data.result);
-    } catch (error) {
-      setResult("Error: Unable to connect to server");
+      if (!/^[0-9+\-*/().\s]+$/.test(expression)) {
+        throw new Error("Invalid expression");
+      }
+      const math = require("mathjs");
+      const calculated = math.evaluate(expression);
+      setResult(calculated);
+    } catch {
+      setResult("Error: Invalid expression");
     }
   }
 
   function handleDnsSubmit(e) {
     e.preventDefault();
-    try {
-      console.log("Sending DNS input:", dnsInput);
-      axios
-        .post("http://localhost:3001/dns", { dnsInput })
-        .then((response) => {
-          console.log("Received DNS response:", response.data);
-          setDnsResponse(response.data.response);
-        })
-        .catch((error) => {
-          setDnsResponse("Error: Unable to connect to DNS server");
-        });
-    } catch (error) {
-      setDnsResponse("Error: Unable to connect to DNS server");
+    const input = dnsInput.trim();
+    const parts = input.split(/[(),\s]+/).filter(Boolean);
+    const action = parts[0];
+    const domain = parts[1];
+    const ip = parts[2];
+    const db = dnsDB[0];
+    const updateDB = dnsDB[1];
+
+    if (action === "R") {
+      if (db[domain]) {
+        setDnsResponse(`${domain} → ${db[domain]}`);
+      } else {
+        setDnsResponse("Error: Domain not found.");
+      }
+    } else if (action === "W") {
+      if (db[domain]) {
+        setDnsResponse("Error: Domain already exists.");
+      } else {
+        updateDB({ ...db, [domain]: ip });
+        setDnsResponse(`Saved: ${domain} → ${ip}`);
+      }
+    } else {
+      setDnsResponse("Error: Invalid format. Use (R, domain) or (W, domain, IP)");
     }
   }
+
+  // async function handleCalcSubmit(e) {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post ("http://localhost:3001/calculate", { expression });
+  //     setResult(response.data.result);
+  //   } catch (error) {
+  //     setResult("Error: Unable to connect to server");
+  //   }
+  // }
+
+  // function handleDnsSubmit(e) {
+  //   e.preventDefault();
+  //   try {
+  //     console.log("Sending DNS input:", dnsInput);
+  //     axios
+  //       .post("http://localhost:3001/dns", { dnsInput })
+  //       .then((response) => {
+  //         console.log("Received DNS response:", response.data);
+  //         setDnsResponse(response.data.response);
+  //       })
+  //       .catch((error) => {
+  //         setDnsResponse("Error: Unable to connect to DNS server");
+  //       });
+  //   } catch (error) {
+  //     setDnsResponse("Error: Unable to connect to DNS server");
+  //   }
+  // }
 
   return (
     <div className="container">
