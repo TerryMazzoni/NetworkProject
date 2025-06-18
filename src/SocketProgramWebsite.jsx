@@ -1,5 +1,6 @@
 import { useState } from "react";
 import lecturesData from "./lectureRessources.json";
+import axios from "axios";
 
 import "./styles.css";
 
@@ -11,52 +12,33 @@ export default function SocketProgramWebsite() {
   const [dnsInput, setDnsInput] = useState("");
   const [dnsResponse, setDnsResponse] = useState(null);
 
-  const dnsDB = useState({
-    "www.google.com": "222.222.22.2",
-    "portal.dankook.ac.kr": "123.123.12.1",
-    "www.example.com": "98.76.54.32",
-    "www.project.com": "12.34.56.78"
-  });
-
-  function handleCalcSubmit(e) {
+  async function handleCalcSubmit(e) {
     e.preventDefault();
     try {
-      if (!/^[0-9+\-*/().\s]+$/.test(expression)) {
-        throw new Error("Invalid expression");
-      }
-      const math = require("mathjs");
-      const calculated = math.evaluate(expression);
-      setResult(calculated);
-    } catch {
-      setResult("Error: Invalid expression");
+      console.log("Sending expression:", expression);
+      const response = await axios.post ("http://localhost:3001/calculate", { expression });
+      console.log("Received response:", response.data);
+      setResult(response.data.result);
+    } catch (error) {
+      setResult("Error: Unable to connect to server");
     }
   }
 
   function handleDnsSubmit(e) {
     e.preventDefault();
-    const input = dnsInput.trim();
-    const parts = input.split(/[(),\s]+/).filter(Boolean);
-    const action = parts[0];
-    const domain = parts[1];
-    const ip = parts[2];
-    const db = dnsDB[0];
-    const updateDB = dnsDB[1];
-
-    if (action === "R") {
-      if (db[domain]) {
-        setDnsResponse(`${domain} → ${db[domain]}`);
-      } else {
-        setDnsResponse("Error: Domain not found.");
-      }
-    } else if (action === "W") {
-      if (db[domain]) {
-        setDnsResponse("Error: Domain already exists.");
-      } else {
-        updateDB({ ...db, [domain]: ip });
-        setDnsResponse(`Saved: ${domain} → ${ip}`);
-      }
-    } else {
-      setDnsResponse("Error: Invalid format. Use (R, domain) or (W, domain, IP)");
+    try {
+      console.log("Sending DNS input:", dnsInput);
+      axios
+        .post("http://localhost:3001/dns", { dnsInput })
+        .then((response) => {
+          console.log("Received DNS response:", response.data);
+          setDnsResponse(response.data.response);
+        })
+        .catch((error) => {
+          setDnsResponse("Error: Unable to connect to DNS server");
+        });
+    } catch (error) {
+      setDnsResponse("Error: Unable to connect to DNS server");
     }
   }
 
@@ -157,6 +139,15 @@ export default function SocketProgramWebsite() {
             ) : result === "Error: Invalid expression" ? (
               <p className="response red">Server response: {result}</p>
             ) : null}
+            <div className="download-section">
+              <a
+                href="/server.c"
+                download="server.c"
+                className="download-btn"
+              >
+                Download Server Code
+              </a>
+            </div>
           </div>
         )}
 
@@ -178,6 +169,15 @@ export default function SocketProgramWebsite() {
               </div>
             </form>
             {dnsResponse && <p className="response purple">Server response: {dnsResponse}</p>}
+            <div className="download-section">
+              <a
+                href="/local_dns.c"
+                download="local_dns.c"
+                className="download-btn"
+              >
+                Download DNS code
+              </a>
+            </div>
           </div>
         )}
       </div>
